@@ -2,6 +2,7 @@ package t1.ismailov.timetracking.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,28 +10,42 @@ import org.springframework.web.bind.annotation.*;
 import t1.ismailov.timetracking.dto.Statistics;
 
 @RestController
-@RequestMapping("/statistics/v1")
-@Tag(name = "Статистика", description = "API для получения статистики")
+@RequestMapping("/v1/statistics")
+@Tag(name = "Statistics", description = "Data on the execution of methods")
 public interface StatisticsControllerApi {
 
-    @GetMapping(value = "/method/{methodId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Получение статистики по ID", description = "Получение статистики для метода по ID")
-    ResponseEntity<Statistics> getStatisticsByMethodId(@Parameter(description = "ID метода, для которого требуется статистика")
-                                                       @PathVariable long methodId);
+    @Operation(summary = "Getting statistics on an annotation",
+            description = "Getting statistics of synchronous/asynchronous execution of methods " +
+                    "marked with the @TrackTime/@TrackAsyncTime annotation")
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Получение статистики по аннотации",
-            description = "Получение статистики для методов, помеченных аннотацией:" +
-                    " @TrackTime (синхронно) или @TrackAsyncTime (асинхронно)")
-    ResponseEntity<Statistics> getStatisticsByAsyncStatus(@Parameter(description = "Параметр для указания типа статистики")
-                                                          @RequestParam(required = false, defaultValue = "false") boolean async);
+    ResponseEntity<Statistics> getStatisticsByAsyncStatus(@Parameter(description = "Parameter for getting statistics " +
+            "on methods executed synchronously = false / asynchronously = true")
+                                                          @RequestParam(required = false, defaultValue = "false")
+                                                          boolean async);
+
+    @Operation(summary = "Getting statistics by ID", description = "Getting statistics for a method by ID")
+
+    @GetMapping(value = "/method/{methodId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Statistics> getStatisticsByMethodId(
+            @Parameter(description = "ID of the method to obtain statistics on it")
+            @Schema(example = "1")
+            @PathVariable long methodId
+    );
+
+    @Operation(summary = "Getting statistics for a group of methods",
+            description = "Obtaining statistics of synchronous/asynchronous execution of a method by Id," +
+                    "marked with the @TrackTime/@TrackAsyncTime annotation")
+
+    //Получить все группы
 
     @GetMapping(value = "/group/{group}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Получение статистики по группе методов",
-            description = "Получение статистики для методов определенной группы, помеченных аннотацией: " +
-                    "@TrackTime (синхронно) или @TrackAsyncTime (асинхронно)")
-    ResponseEntity<Statistics> getStatisticsByGroup(@Parameter(description = "Параметр для указания типа статистики")
-                                                    @RequestParam(required = false, defaultValue = "false") boolean async,
-                                                    @Parameter(description = "Параметр для указания группы методов")
-                                                    @PathVariable String group);
+    ResponseEntity<Statistics> getStatisticsByGroup(
+            @Parameter(description = "Parameter for getting statistics of executed methods " +
+                    "synchronously = false / asynchronously = true in a group")
+            @RequestParam(required = false, defaultValue = "false")
+            boolean async,
+            @Parameter(description = "Parameter for specifying a group of methods for which statistics are needed")
+            @Schema(example = "service")
+            @PathVariable String group);
 }
