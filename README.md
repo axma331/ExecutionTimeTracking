@@ -1,3 +1,23 @@
+# Система учета времени выполнения методов
+
+Данное приложение реализует систему для отслеживания времени выполнения методов с использованием Spring AOP, включая синхронную и асинхронную обработку. Система логирует данные в базу данных и предоставляет REST API для получения статистики.
+
+## Технологии
+
+Проект использует следующие технологии и инструменты:
+
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white "Java")
+![Maven](https://img.shields.io/badge/Maven-green.svg?style=for-the-badge&logo=mockito&logoColor=white "Maven")
+![Spring](https://img.shields.io/badge/Spring-blueviolet.svg?style=for-the-badge&logo=spring&logoColor=white "Spring")
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![Liquibase](https://img.shields.io/badge/Liquibase-%230073AF.svg?style=for-the-badge&logo=liquibase&logoColor=white "Liquibase")
+![GitHub](https://img.shields.io/badge/git-%23121011.svg?style=for-the-badge&logo=github&logoColor=white "Git")
++ Язык программирования: *Java 17*
++ Автоматизация сборки: *Maven*
++ Фреймворк: *Spring*
++ База данных: *PostgreSQL*
++ Миграция данных: *Liquibase*
++ Контроль версий: *Git*
 ## Реализация системы учета времени выполнения методов
 
 <details>
@@ -42,15 +62,62 @@ REST API:
 Правильное использование паттернов проектирования.
 </details>
 
-![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white "Java")
-![Maven](https://img.shields.io/badge/Maven-green.svg?style=for-the-badge&logo=mockito&logoColor=white "Maven")
-![Spring](https://img.shields.io/badge/Spring-blueviolet.svg?style=for-the-badge&logo=spring&logoColor=white "Spring")
-![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
-![GitHub](https://img.shields.io/badge/git-%23121011.svg?style=for-the-badge&logo=github&logoColor=white "Git")
-+ Язык программирования: *Java v.17*
-+ Автоматизация сборки: *Maven*
-+ Фреймворк: *Spring*
-+ База данных: *PostgreSQL*
-+ Контроль версий: *Git*
+## Установка и запуск
 
-Для запуска приложения необходимо в aplication.properties указать настройки БД
+### Предварительные требования
+
+Убедитесь, что у вас установлены следующие инструменты:
+- Java 17
+- Maven
+- PostgreSQL
+
+### Шаги установки
+
+1. Клонируйте репозиторий:
+```bash
+git clone https://github.com/axma331/execution_time_tracking.git
+```
+   
+2. Перейдите в директорию проекта:
+```bash
+cd your-repo
+```
+3. Настройте базу данных в файле application.properties`:
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/yourdatabase
+spring.datasource.username=yourusername
+spring.datasource.password=yourpassword
+```
+4. Запустите приложение с помощью Maven:
+```bash
+mvn spring-boot:run
+```
+### Миграции базы данных
+Liquibase автоматически применит необходимые миграции при запуске приложения.
+
+### Документация API
+После запуска приложения документация API доступна по следующему URL:
+```bash
+http://localhost:8005/swagger-ui/
+```
+
+В Swagger UI вы можете просматривать и тестировать все доступные конечные точки.
+### Примеры использования
+Вот несколько примеров использования API для получения статистики времени выполнения методов:
+
+`•`Получение всей статистики:
+```bash
+GET /v1/statistics
+```
+`•`Получение имен методов с идентификатором:
+```bash
+GET /v1/statistics/method
+```
+`•`Получение статистики по ID:
+```bash
+GET /v1/statistics/method/{methodId}
+```
+`•`Получение статистики по группе методов:
+```bash
+GET /v1/statistics//group/{group}
+```
