@@ -21,7 +21,7 @@ public class ExecutionTimeServiceImpl implements ExecutionTimeService {
     private final ExecutionTimeRepository repository;
 
     @Override
-    @Async("jobExecutor")
+    @Async("executor")
     @Transactional
     public void save(ExecutionTimeDto dto) {
         Method method = methodService.findByNameOrSave(dto.getMethodDto());

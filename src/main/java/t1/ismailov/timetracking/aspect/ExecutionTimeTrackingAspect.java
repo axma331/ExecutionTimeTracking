@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import t1.ismailov.timetracking.dto.ExecutionTimeDto;
 import t1.ismailov.timetracking.dto.MethodDto;
@@ -51,34 +52,36 @@ public class ExecutionTimeTrackingAspect {
             executionTimeService.save(
                     executionTimeMapper.createWithExceptionDto(methodDto)
             );
+            log.error("An exception was thrown! Error information is saved to the database using " +
+                    "the createWithExceptionDto method");
             throw new RuntimeException(ex);
         }
     }
 
-    @Order(5)
+    @Order(10)
+    @Async("executor")
     @Around("trackAsyncTimePointcut()")
-    public Object trackAsyncTime(ProceedingJoinPoint joinPoint) {
+    public CompletableFuture<Void> trackAsyncTime(ProceedingJoinPoint joinPoint) {
         MethodDto methodDto = methodMapper.getMethodDtoFromSignature(joinPoint.getSignature());
         long startTime = System.nanoTime();
         log.info("Method {} is executed async", methodDto.getName());
 
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                return joinPoint.proceed();
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
-        }).thenApply(result -> {
-            long endTime = System.nanoTime();
+        return CompletableFuture.runAsync(() -> {
+                    try {
+                        joinPoint.proceed();
+                        long endTime = System.nanoTime();
 
-            loggingAndSaveExecutionTime(methodDto, startTime, endTime, true);
-            return result;
-        }).exceptionally(ex -> {
-            executionTimeService.save(
-                    executionTimeMapper.createWithExceptionAsyncDto(methodDto)
-            );
-            throw new RuntimeException(ex);
-        });
+                        loggingAndSaveExecutionTime(methodDto, startTime, endTime, true);
+                    } catch (Throwable e) {
+                        executionTimeService.save(
+                                executionTimeMapper.createWithExceptionAsyncDto(methodDto)
+                        );
+                        log.error("An exception was thrown! Error information is saved to the database using " +
+                                "the createWithExceptionAsyncDto method", e);
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
     }
 
     private void loggingAndSaveExecutionTime(MethodDto methodDto, long startTime, long endTime, boolean isAsync) {

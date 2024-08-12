@@ -24,13 +24,13 @@ public class TestController {
         try {
             testService.testTime();
         } catch (InterruptedException e) {
-            log.error(e.getMessage());
+            log.error("Exception caught in test method", e);
         }
 
         try {
             testService.testAsyncTime();
         } catch (InterruptedException e) {
-            log.error(e.getMessage());
+            log.error("Exception caught in test method", e);
         }
         return ResponseEntity.ok().build();
     }

@@ -6,7 +6,6 @@ import t1.ismailov.timetracking.annotation.TrackAsyncTime;
 import t1.ismailov.timetracking.annotation.TrackTime;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @Slf4j
@@ -16,18 +15,19 @@ public class TestServiceImpl implements TestService {
     @Override
     @TrackTime
     public void testTime() throws InterruptedException {
-        randomTime();
+        long sleepTime = random.nextLong(50) + 1;
+        System.out.printf("Метод testTime уснул на %d ms\n", sleepTime);
+        Thread.sleep(sleepTime);
+        if (random.nextBoolean()) {
+            throw new InterruptedException("Force abort of a method to test exception handling");
+        }
     }
 
     @Override
     @TrackAsyncTime
     public void testAsyncTime() throws InterruptedException {
-        randomTime();
-    }
-
-    private static void randomTime() throws InterruptedException {
         long sleepTime = random.nextLong(50) + 1;
-        System.out.printf("Метод уснул на %d ms\n", sleepTime);
+        System.out.printf("Метод testAsyncTime уснул на %d ms\n", sleepTime);
         Thread.sleep(sleepTime);
         if (random.nextBoolean()) {
             throw new InterruptedException("Force abort of a method to test exception handling");

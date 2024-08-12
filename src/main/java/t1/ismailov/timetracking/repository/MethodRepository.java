@@ -23,9 +23,6 @@ public interface MethodRepository extends JpaRepository<Method, Long> {
     @EntityGraph(attributePaths = {"executionTimes"})
     List<Method> findAllByGroup(String group);
 
-//    @EntityGraph(attributePaths = {"executionTimes"})
-//    List<Method> findAll();
-
     @Query("SELECT e FROM ExecutionTime e WHERE e.async = :isAsync")
     List<ExecutionTime> findExecutionTimeByAsync(@Param("isAsync") boolean isAsync);
 

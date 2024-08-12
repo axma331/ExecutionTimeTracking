@@ -11,7 +11,7 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class ExecutorConfig {
 
-    @Bean(name = "jobExecutor")
+    @Bean(name = "executor")
     public Executor taskExecutor() {
         return new ThreadPoolTaskExecutor();
     }
