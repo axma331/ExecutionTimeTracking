@@ -35,10 +35,12 @@ public class ExecutionTimeTrackingAspect {
     }
 
 
+    @Order(1)
     @Around("trackTimePointcut()")
     public Object trackTime(ProceedingJoinPoint joinPoint) {
         MethodDto methodDto = methodMapper.getMethodDtoFromSignature(joinPoint.getSignature());
         long startTime = System.nanoTime();
+        log.info("Method {} is executed sync", methodDto.getName());
         try {
             Object result = joinPoint.proceed();
             long endTime = System.nanoTime();
@@ -53,11 +55,12 @@ public class ExecutionTimeTrackingAspect {
         }
     }
 
-    @Order(10)
+    @Order(5)
     @Around("trackAsyncTimePointcut()")
     public Object trackAsyncTime(ProceedingJoinPoint joinPoint) {
         MethodDto methodDto = methodMapper.getMethodDtoFromSignature(joinPoint.getSignature());
         long startTime = System.nanoTime();
+        log.info("Method {} is executed async", methodDto.getName());
 
         return CompletableFuture.supplyAsync(() -> {
             try {

@@ -20,7 +20,7 @@ public class TestController {
 
     @Operation(summary = "Running test methods for verification")
     @GetMapping("/execute")
-    public ResponseEntity<Void> test() {
+    public ResponseEntity<Void> test() throws InterruptedException {
         testService.testTime();
         testService.testAsyncTime();
         return ResponseEntity.ok().build();

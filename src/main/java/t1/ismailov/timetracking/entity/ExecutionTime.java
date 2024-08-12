@@ -45,6 +45,9 @@ public class ExecutionTime {
     @Column(name = "is_successfully", nullable = false)
     private boolean successfully;
 
+    /**
+     * true = @TrackAsyncTime / false = @TrackTime
+     **/
     @Column(name = "is_async", nullable = false)
-    private boolean async;                          //true - если @TrackAsyncTime, false - если @TrackTime
+    private boolean async;
 }

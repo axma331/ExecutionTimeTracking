@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+/**
+ * Data Transfer Object (DTO) to represent method information.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,7 +16,18 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class MethodDto {
 
-    private String name;            // Наименование метода
-    private String declaredType;    // Класс, к которому относится метод
-    private String group;           // Группа, к которой относится метод (например, имя пакета)
+    /**
+     * Method name.
+     */
+    private String name;
+
+    /**
+     * The name of the class to which the method belongs.
+     */
+    private String declaredType;
+
+    /**
+     * The name of the package in which the method class resides.
+     */
+    private String group;
 }

@@ -11,7 +11,9 @@ import t1.ismailov.timetracking.repository.MethodRepository;
 import t1.ismailov.timetracking.util.CalculateStatistic;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,18 @@ public class MethodServiceImpl implements MethodService {
     private final MethodMapper mapper;
     private final MethodRepository repository;
     private final CalculateStatistic calculateStatistic;
+
+    @Override
+    public Map<Long, Map<String, String>> findAllMethodsAsMap() {
+        return repository.findAll().stream()
+                .collect(Collectors.toMap(
+                        Method::getId,
+                        method -> Map.of(
+                                "name", method.getName(),
+                                "group", method.getGroup()
+                        )
+                ));
+    }
 
     @Override
     public Method findByNameOrSave(MethodDto dto) {
@@ -41,14 +55,12 @@ public class MethodServiceImpl implements MethodService {
     }
 
     @Override
-    public Statistics getStatisticsByAsyncStatus(boolean isAsync) {
-        List<Method> list = repository.findAll();
-        Stream<ExecutionTime> executionTimes = list.stream()
-                .flatMap(method -> method.getExecutionTimes().stream());
-        if (isAsync) {
-            executionTimes = executionTimes.filter(ExecutionTime::isAsync);
-        }
-        return calculateStatistic.calculate(executionTimes.toList());
+    public Statistics getStatisticsAllOrByStatus(Boolean isAsync) {
+        return calculateStatistic.calculate(
+                Objects.nonNull(isAsync)
+                        ? repository.findExecutionTimeByAsync(isAsync)
+                        : repository.findAllExecutionTimes()
+        );
     }
 
     @Override

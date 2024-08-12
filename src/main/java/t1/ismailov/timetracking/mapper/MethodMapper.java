@@ -15,8 +15,6 @@ public interface MethodMapper {
     @Mapping(target = "name", expression = "java(signature.getName())")
     @Mapping(target = "declaredType", expression = "java(signature.getDeclaringType().getSimpleName())")
     @Mapping(target = "group", expression = "java(signature.getDeclaringType().getPackageName()" +
-            ".substring(signature.getDeclaringType().getPackageName().lastIndexOf('.') + 1)" +
-            ")")
+            ".substring(signature.getDeclaringType().getPackageName().lastIndexOf('.') + 1))")
     MethodDto getMethodDtoFromSignature(Signature signature);
-
 }

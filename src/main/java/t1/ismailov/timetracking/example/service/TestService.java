@@ -5,8 +5,8 @@ package t1.ismailov.timetracking.example.service;
  */
 public interface TestService {
 
-    void testTime();
+    void testTime() throws InterruptedException;
 
-    void testAsyncTime();
+    void testAsyncTime() throws InterruptedException;
 }
 

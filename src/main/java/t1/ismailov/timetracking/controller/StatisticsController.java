@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import t1.ismailov.timetracking.dto.Statistics;
 import t1.ismailov.timetracking.service.MethodService;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 public class StatisticsController implements StatisticsControllerApi {
@@ -18,12 +20,17 @@ public class StatisticsController implements StatisticsControllerApi {
     }
 
     @Override
-    public ResponseEntity<Statistics> getStatisticsByAsyncStatus(boolean async) {
-        return ResponseEntity.ok(methodService.getStatisticsByAsyncStatus(async));
+    public ResponseEntity<Statistics> getAllStatisticsByStatus(Boolean async) {
+        return ResponseEntity.ok(methodService.getStatisticsAllOrByStatus(async));
     }
 
     @Override
     public ResponseEntity<Statistics> getStatisticsByGroup(boolean async, String group) {
         return ResponseEntity.ok(methodService.getStatisticsByGroup(group, async));
+    }
+
+    @Override
+    public Map<Long, Map<String, String>>  getMethodNamesWithId() {
+        return methodService.findAllMethodsAsMap();
     }
 }

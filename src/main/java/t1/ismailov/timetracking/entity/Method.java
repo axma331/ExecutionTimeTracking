@@ -1,7 +1,10 @@
 package t1.ismailov.timetracking.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -22,10 +25,10 @@ public class Method {
     private String name;
 
     @Column(name = "declared_type", nullable = false)
-    private String declaredType;                         //Класс которому принадлежит метод
+    private String declaredType;
 
     @Column(name = "group_method", nullable = false)
-    private String group;                               //Пакет в котором лежит класс
+    private String group;
 
     @OneToMany(mappedBy = "methodId")
     private List<ExecutionTime> executionTimes;
