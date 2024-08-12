@@ -24,7 +24,7 @@ public interface StatisticsControllerApi {
                     "marked with the @TrackTime/@TrackAsyncTime annotation")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Statistics> getAllStatisticsByStatus(
-            @Parameter(description = "Parameter for getting statistics on methods executed" +
+            @Parameter(description = "Parameter for getting statistics on methods executed " +
                     "synchronously (false) / asynchronously (true)")
             @RequestParam(required = false)
             Boolean async
