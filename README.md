@@ -105,19 +105,19 @@ http://localhost:8005/swagger-ui/
 ### Примеры использования
 Вот несколько примеров использования API для получения статистики времени выполнения методов:
 
-`•`Получение всей статистики:
-```bash
-GET /v1/statistics
-```
-`•`Получение имен методов с идентификатором:
-```bash
-GET /v1/statistics/method
-```
-`•`Получение статистики по ID:
-```bash
-GET /v1/statistics/method/{methodId}
-```
-`•`Получение статистики по группе методов:
-```bash
-GET /v1/statistics//group/{group}
-```
+- Получение всей статистики:
+    ```bash
+    GET /v1/statistics
+    ```
+- Получение имен методов с идентификатором:
+    ```bash
+    GET /v1/statistics/method
+    ```
+- Получение статистики по ID:
+    ```bash
+    GET /v1/statistics/method/{methodId}
+    ```
+- Получение статистики по группе методов:
+    ```bash
+    GET /v1/statistics//group/{group}
+    ```
